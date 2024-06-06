@@ -1,0 +1,6 @@
+Flask
+flask-restful
+flask-smorest
+pymongo
+Flask-PyMongo
+deepface
