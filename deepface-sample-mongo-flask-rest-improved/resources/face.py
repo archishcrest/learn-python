@@ -59,5 +59,3 @@ class FaceAdd(MethodView):
             return jsonify({"message": "Face added successfully"}), 201
         except ValidationError as err:
             return jsonify({"errors": err.messages}), 400
-
-        return {"message": "Face added successfully"}, 201
