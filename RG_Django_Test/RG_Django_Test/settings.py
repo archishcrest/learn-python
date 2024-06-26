@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rgadmin'
+    'rgadmin',
+    'rgprofiles'
 ]
 
 MIDDLEWARE = [
@@ -77,7 +78,7 @@ WSGI_APPLICATION = 'RG_Django_Test.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'researchgiant',
+        'NAME': 'researchgiant-django',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',

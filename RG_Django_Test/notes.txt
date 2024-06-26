@@ -1,0 +1,30 @@
+UPDATE profile_category SET `description` = NULL, category_2 = NULL, 
+category_3 = NULL, image = NULL, thumbtack_id = NULL, thumbtack_name = NULL
+WHERE `description` = '' OR category_2 = '' or 
+category_3 = '' or image = '' or thumbtack_id = ''
+
+------------
+
+2.
+
+ALTER TABLE profile_category_location
+ADD CONSTRAINT fk_profile_category_location_category
+FOREIGN KEY (category_id) REFERENCES profile_category(id)
+ON DELETE CASCADE;
+
+
+----------
+
+3.
+
+
+SELECT category_id 
+FROM profile_category_location 
+WHERE category_id NOT IN (SELECT id FROM profile_category);
+
+
+---------
+
+4.
+
+CREATE INDEX idx_composite ON profile_category_link (profile_id, category_id);
