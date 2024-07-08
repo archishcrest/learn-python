@@ -170,7 +170,7 @@ class Orders(models.Model):
     user = models.ForeignKey('Users', models.DO_NOTHING, blank=True, null=True)
     title = models.CharField(max_length=255, blank=True, null=True)
     order_date = models.DateTimeField(blank=True, null=True)
-    status = models.TextField(null=Trueblank=True, null=True)  # This field type is a guess.
+    status = models.TextField(null=True,blank=True, null=True)  # This field type is a guess.
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     url = models.CharField(db_column='Url', max_length=255, blank=True, null=True)  # Field name made lowercase.
 

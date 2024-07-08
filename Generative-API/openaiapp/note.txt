@@ -1,0 +1,28 @@
+pip install openai
+
+https://www.browserless.io/blog/browser-automation
+
+https://nordicapis.com/10-image-generation-apis-worth-a-look/
+
+https://github.com/borisdayma/dalle-mini
+https://github.com/CompVis/stable-diffusion
+https://hojonathanho.github.io/diffusion/
+
+
+https://github.com/huggingface/diffusers
+
+
+https://huggingface.co/docs/diffusers/using-diffusers/kandinsky?text-to-image=Kandinsky+2.2
+
+
+https://colab.research.google.com/drive/1-JRk716lfLr1nudqU432bQygOBKvXHMT?authuser=0#scrollTo=dD8T5DZoXCtA
+
+https://colab.research.google.com/drive/1w9yxrKP6JtWP2Gsv8qbmYhjtWHXe_gD3?authuser=0#scrollTo=--vyuuzdg66g
+
+stable fusion
+mid journy
+
+
+https://help.runwayml.com/hc/en-us/articles/21668552945171-Do-you-have-a-publicly-accessible-API
+
+

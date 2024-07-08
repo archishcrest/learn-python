@@ -8,6 +8,9 @@ urlpatterns = [
 
     path('services/<str:service>', ServiceByCategory.as_view(), name='service-by-category'),
     path('services/<str:service>/<str:state>/', ServiceByStateCategory.as_view(), name='service-by-category-state'),
+
+    path('add/', profilCRUD.as_view(), name='profile-crud'),
+    path('<int:pk>/', profilCRUD.as_view(), name='profile-crud'),
     
     #re_path(r'^(?:(?P<state>\w+)/)?$', BusinessByCategoryState.as_view(), name='business-by-category-state'),
 

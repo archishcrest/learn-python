@@ -10,6 +10,7 @@ from django.db.models import Count
 from dotenv import load_dotenv
 import os
 from .rgsetting import stateslistsetting
+from .serializers import ProfileSerializer
 
 load_dotenv()
 
@@ -42,7 +43,6 @@ class BusinessByCategory(APIView):
 	    	return Response({"business": output_data}, status=status.HTTP_200_OK)
     	else:
     		return Response({"message": "No data found"}, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class BusinessByCategoryState(APIView):
@@ -91,7 +91,6 @@ class BusinessByCategoryState(APIView):
     		return Response({"message": "No data found"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 class BusinessByCategoryStateCity(APIView):
     def get(self, request, state=None,city=None):
 
@@ -136,7 +135,6 @@ class BusinessByCategoryStateCity(APIView):
 	    	return Response({"business": output_data,"city": sorted(city_data)}, status=status.HTTP_200_OK)
     	else:
     		return Response({"message": "No data found"}, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class ServiceByCategory(APIView):
@@ -188,3 +186,53 @@ class ServiceByStateCategory(APIView):
 	    	return Response({"profiles": profiles}, status=status.HTTP_200_OK)
     	else:
     		return Response({"message": "No data found"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class profilCRUD(APIView):
+
+	def get_object(self, pk):
+		try:
+
+			return Profile.objects.get(pk=pk)
+		except Profile.DoesNotExist:
+			return None
+	
+	def post(self, request):
+		serializer = ProfileSerializer(data=request.data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+	def put(self, request, pk):
+
+		profile = self.get_object(pk)
+
+		if profile is None:
+			return Response(status=status.HTTP_404_NOT_FOUND)
+
+		serializer = ProfileSerializer(profile, data=request.data, partial=True)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+	def get(self, request, pk):
+
+		profile = self.get_object(pk)
+		if profile is None:
+			return Response({"message": "No data found"},status=status.HTTP_404_NOT_FOUND)
+
+		serializer = ProfileSerializer(profile)
+
+		return Response(serializer.data)
+
+	def delete(self, request, pk):
+
+		profile = self.get_object(pk)
+		if profile is None:
+			return Response({"message": "No data found"},status=status.HTTP_404_NOT_FOUND)
+
+		profile.delete()
+
+		return Response({"message": "Record removed"},status=status.HTTP_204_NO_CONTENT)
