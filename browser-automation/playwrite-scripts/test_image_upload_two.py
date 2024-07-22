@@ -30,6 +30,10 @@ def test_login(page: Page):
 # https://playwright.dev/python/docs/api/class-elementhandle#element-handle-wait-for-selector
 
 
+# https://github.com/archishcrest/learn-python/commit/e0ee295e72bc32e8f7926e9221c36f47a6b12ecd
+# https://github.com/archishcrest/learn-python/
+
+
 
 
 
