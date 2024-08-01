@@ -1,21 +1,15 @@
-from django.contrib.auth.models import AbstractUser, Group, Permission
-from django.db import models
+# models.py
 
-class CustomUser(AbstractUser):
-    is_admin = models.BooleanField(default=False)
-    is_customer = models.BooleanField(default=False)
-    
-    groups = models.ManyToManyField(
-        Group,
-        related_name='customuser_set',  # Specify a different related name
-        blank=True,
-        help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
-        verbose_name='groups',
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+import uuid
+
+class User(AbstractUser):
+    ROLE_CHOICES = (
+        ('super_admin', 'Super Admin'),
+        ('admin', 'Admin'),
+        ('customer', 'Customer'),
     )
-    user_permissions = models.ManyToManyField(
-        Permission,
-        related_name='customuser_set',  # Specify a different related name
-        blank=True,
-        help_text='Specific permissions for this user.',
-        verbose_name='user permissions',
-    )
+    role = models.CharField(max_length=50, choices=ROLE_CHOICES, default='customer')
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    email = models.EmailField(unique=True, default=uuid.uuid1)

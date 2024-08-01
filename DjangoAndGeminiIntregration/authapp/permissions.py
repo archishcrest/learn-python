@@ -1,9 +1,15 @@
-from rest_framework.permissions import BasePermission
+# permissions.py
 
-class IsAdminUser(BasePermission):
-    def has_permission(self, request, view):
-        return bool(request.user and request.user.is_authenticated and request.user.is_admin)
+from rest_framework import permissions
 
-class IsCustomerUser(BasePermission):
+class IsSuperAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
-        return bool(request.user and request.user.is_authenticated and request.user.is_customer)
+        return request.user and request.user.role == 'super_admin'
+
+class IsAdmin(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user and request.user.role in ['super_admin', 'admin']
+
+class IsCustomer(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user and request.user.role == 'customer'

@@ -5,6 +5,9 @@ import json
 from dotenv import load_dotenv
 import os
 import google.generativeai as genai
+from authapp.permissions import IsSuperAdmin, IsAdmin, IsCustomer
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 # from .rgsetting import stateslistsetting
 # from .serializers import ProfileSerializer
 
@@ -13,6 +16,9 @@ load_dotenv()
 
 
 class TextPromtAndReturn(APIView):
+
+	authentication_classes = [JWTAuthentication]
+	permission_classes = [IsAuthenticated,IsAdmin]
 
 	def post(self, request):
 
@@ -40,6 +46,6 @@ class TextPromtAndReturn(APIView):
 		)
 
 		response = chat_session.send_message(request.data['prompt'])
-		print(response.text)
+		#print(response.text)
 
 		return Response({"message": response.text}, status=status.HTTP_200_OK)
