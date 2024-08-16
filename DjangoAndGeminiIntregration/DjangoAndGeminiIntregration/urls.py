@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('test/', include('ai_test.urls')),
     path('auth/', include('authapp.urls')),
+    path('agent/', include('agents.urls')),
 ]

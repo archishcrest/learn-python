@@ -24,3 +24,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Add custom claims
         token['role'] = user.role
         return token
+
+class OnlyUserNameSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ['username']

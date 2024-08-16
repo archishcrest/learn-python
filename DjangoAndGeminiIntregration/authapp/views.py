@@ -62,3 +62,12 @@ class UserListView(generics.ListAPIView):
     serializer_class = UserSerializer
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated, IsAdmin]
+
+
+# {
+#     "id": 1,
+#     "username": "user1",
+#     "role": "admin",
+#     "email": "a@admin.com",
+#     "phone_number": "123"
+# }
