@@ -19,10 +19,11 @@ class OnlyAgentNameSerializer(serializers.ModelSerializer):
 
 class AgentSerializer(serializers.ModelSerializer):
 
+	id = serializers.ReadOnlyField()
 	user = serializers.CharField(source='user_id', read_only=True)
 	class Meta:
 		model = Agent
-		fields = ['name', 'prompt', 'user']
+		fields = ['id','name', 'prompt', 'user']
     
     # Make title and slug required fields
 	name = serializers.CharField(required=True)
@@ -40,12 +41,13 @@ class AgentSerializer(serializers.ModelSerializer):
 
 class AgentQuestionsSerializer(serializers.ModelSerializer):
 
+	id = serializers.ReadOnlyField()
 	agent_name = serializers.CharField(source='agent_id.name', read_only=True)
 	username = serializers.CharField(source='agent_id.user_id.username', read_only=True)
 
 	class Meta:
 		model = AgentQuestions
-		fields = ['question', 'agent_name','username']
+		fields = ['id','question', 'agent_name','username']
     
     # Make title and slug required fields
 	question = serializers.CharField(required=True)
