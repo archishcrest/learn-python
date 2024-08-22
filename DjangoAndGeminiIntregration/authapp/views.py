@@ -11,6 +11,7 @@ from .serializers import UserSerializer, MyTokenObtainPairSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import status
+from django.http import JsonResponse
 
 
 User = get_user_model()
@@ -22,6 +23,37 @@ class RegisterView(generics.CreateAPIView):
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
+    '''
+    def post(self, request, *args, **kwargs):
+        # Call the original post method to get the token
+        response = super().post(request, *args, **kwargs)
+        
+        # Extract the token from the response data
+        token = response.data.get('access')
+
+        # Create a new response to set the cookie
+        response = JsonResponse({'message': 'Login successful'})
+        response.set_cookie(
+            key='jwt', 
+            value=token, 
+            httponly=True,  # Make the cookie HttpOnly
+            secure=True,    # Set this to True in production with HTTPS
+            samesite='Lax'  # or 'Strict'
+        )
+        
+        # You can add the refresh token in a different cookie if needed
+        # refresh_token = response.data.get('refresh')
+        # response.set_cookie(
+        #     key='refresh_token',
+        #     value=refresh_token,
+        #     httponly=True,
+        #     secure=True,
+        #     samesite='Lax'
+        # )
+        
+        return response
+    '''
 
 class SuperAdminView(APIView):
     permission_classes = [IsSuperAdmin]

@@ -177,7 +177,7 @@ class AgentQuestionsView(APIView):
 class AgentQuestionAnswersView(APIView):
 
 	authentication_classes = [JWTAuthentication]
-	permission_classes = [IsAuthenticated,IsCustomer]
+	permission_classes = [IsAuthenticated,IsAdmin]
 
 
 	def post(self, request,agent_id):
