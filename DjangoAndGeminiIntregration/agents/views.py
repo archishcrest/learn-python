@@ -185,6 +185,9 @@ class AgentQuestionAnswersView(APIView):
 		# check if same question id exists
 		question_ids = [item["question_id"] for item in request.data]
 
+		if(len(question_ids) == 0):
+			return Response({"message": "Missing required fields."},status=status.HTTP_400_BAD_REQUEST)
+
 		if len(question_ids) != len(set(question_ids)):
 			return Response({"message": "Same question ids multiple times"},status=status.HTTP_400_BAD_REQUEST)
 
