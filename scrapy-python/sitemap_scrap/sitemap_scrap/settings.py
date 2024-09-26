@@ -92,3 +92,19 @@ REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
 
+# settings.py
+
+# Scrapy-Selenium settings
+from shutil import which
+
+SELENIUM_DRIVER_NAME = 'chrome'
+SELENIUM_DRIVER_EXECUTABLE_PATH = which('chromedriver')  # Ensure chromedriver is in your PATH
+SELENIUM_DRIVER_ARGUMENTS = ['--headless', '--disable-gpu', '--window-size=1920,1080']
+
+
+# Add the SeleniumMiddleware to your DOWNLOADER_MIDDLEWARES
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy_selenium.SeleniumMiddleware': 800,
+}
+
+
