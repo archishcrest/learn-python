@@ -1,15 +1,13 @@
-import sys
-# from twisted.internet import asyncioreactor
-# asyncioreactor.install()
 import scrapy
+from scrapy_splash import SplashRequest
 from urllib.parse import urlparse, unquote
 from .models import *
 import shutil
 from scrapy.utils.project import get_project_settings
 
-class DynamicTagSpider(scrapy.Spider):
-    name = 'dynamic_tag_spider_bak'
-    
+class DynamicTagSpiderSAP(scrapy.Spider):
+    name = 'dynamic_tag_spider_sap'
+
     custom_settings = {
         'REQUEST_FINGERPRINTER_IMPLEMENTATION': '2.7',
         'FEED_EXPORT_ENCODING': 'utf-8',
@@ -23,18 +21,16 @@ class DynamicTagSpider(scrapy.Spider):
 
     all_content = []
     site_id = None
-    def __init__(self, sitemap_urls=None, site_id = None, tags=None, *args, **kwargs):
+
+    def __init__(self, sitemap_urls=None, site_id=None, tags=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        print(f"Processing: ")
-
-        
         self.site_id = site_id
 
         if sitemap_urls:
             if isinstance(sitemap_urls, str):
                 sitemap_urls = [sitemap_urls]
-            
+
             self.sitemap_urls = []
             for url in sitemap_urls:
                 if not url.startswith(('http://', 'https://')):
@@ -43,30 +39,30 @@ class DynamicTagSpider(scrapy.Spider):
 
         self.allowed_domains = [urlparse(url).netloc for url in self.sitemap_urls]
 
-        print(f"allowed_domains: {self.allowed_domains}")
-        print(f"sitemap_urls: {self.sitemap_urls}")
-        print(f"site_id: {site_id}")
-
         # Convert tags to a list if not already one
         if tags:
             self.tags = tags.split(',')
         else:
             self.tags = ['a']  # Default to 'a' tag if no tags are provided
 
-        # Open the file in 'write' mode to save the output
-        # self.file = open('scraped_content.txt', 'w')
+        settings = get_project_settings()
+        cache_dir = settings.get('HTTPCACHE_DIR', '.scrapy/httpcache')
+        shutil.rmtree(cache_dir, ignore_errors=True)
 
     def start_requests(self):
+        """Override start_requests to use SplashRequest for JavaScript-rendered pages."""
+        print(self.sitemap_urls)
         for url in self.sitemap_urls:
-            yield scrapy.Request(url=url, callback=self.parse,headers={
-                'Cache-Control': 'no-cache',
-                'Pragma': 'no-cache',
-                'Expires': '0'
-            })
+
+            yield SplashRequest(
+                url=url, 
+                callback=self.parse, 
+                args={'wait': 2, 'cache': 0, 'private_mode': True}, 
+                headers={'Cache-Control': 'no-cache'}
+            )
 
     def parse(self, response):
         """Main function that parses the specified tags on the page."""
-        # Print the current URL being processed
         print(f"Processing: {response.url}")
 
         for tag in self.tags:
@@ -83,12 +79,11 @@ class DynamicTagSpider(scrapy.Spider):
                         text = text.strip() if text else "No text"
                         self.all_content.append({
                             "tag": "<a>",
-                            "content":{
-                                "link":link,
-                                "text":text
+                            "content": {
+                                "link": link,
+                                "text": text
                             }
-                            })
-                        #self.file.write(f"Tag: <a>, Text: {text}, URL: {link}\n")
+                        })
 
                 elif tag == 'img':
                     # Handle <img> tags - extract alt text and src (link)
@@ -99,39 +94,30 @@ class DynamicTagSpider(scrapy.Spider):
                         alt_text = alt_text.strip() if alt_text else "No alt text"
                         self.all_content.append({
                             "tag": "<img>",
-                            "content":{
-                                "link":link,
-                                "text":alt_text
+                            "content": {
+                                "link": link,
+                                "alt_text": alt_text
                             }
-                            })
-                        #self.file.write(f"Tag: <img>, Alt: {alt_text}, URL: {link}\n")
+                        })
 
                 else:
-                    # Handle <p> tags - extract the text content
+                    # Handle other tags like <p>
                     content = selector.xpath("text()").get()
                     if content:
                         content = content.strip()
                         self.all_content.append({
                             "tag": f"<{tag}>",
-                            "content":{
-                                "text":content
+                            "content": {
+                                "text": content
                             }
-                            })
-                        #self.file.write(f"Tag: <{tag}>, Content: {content}\n")
+                        })
 
-                # Add more tags if necessary, using similar logic as above
-
+        # Save all content to the database
         SiteContent.objects.create(
             site_id=self.site_id,
             content=self.all_content
-            )
+        )
 
     def closed(self, reason):
-        """Close the file when the spider finishes."""
-        #self.file.close()
-        settings = get_project_settings()
-        cache_dir = settings.get('HTTPCACHE_DIR', '.scrapy/httpcache')
-        if cache_dir:
-            shutil.rmtree(cache_dir, ignore_errors=True)
-            print(f"Cache directory '{cache_dir}' cleared.")
-        print(f"Spider closed: {reason}. Data saved to 'scraped_content.txt'.")
+        """Log the reason when the spider finishes."""
+        print(f"Spider closed: {reason}. All data saved.")
