@@ -59,6 +59,6 @@ class ScrapView(APIView):
 			tags = request.data['tags']
 			runner = CrawlerRunner(get_project_settings())
 
-			d = runner.crawl(DynamicTagSpider, site_id=newSite, sitemap_urls=sitemap_urls, tags=tags)
+			d = runner.crawl(DynamicTagSpiderSAP, site_id=newSite, sitemap_urls=sitemap_urls, tags=tags)
 
 		return Response('Spider executed successfully', status=status.HTTP_200_OK)

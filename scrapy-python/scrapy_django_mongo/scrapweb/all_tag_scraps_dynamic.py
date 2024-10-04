@@ -69,6 +69,8 @@ class DynamicTagSpider(scrapy.Spider):
         # Print the current URL being processed
         print(f"Processing: {response.url}")
 
+        self.all_content = []
+
         for tag in self.tags:
             # Select elements based on the current tag
             selectors = response.xpath(f"//{tag}")

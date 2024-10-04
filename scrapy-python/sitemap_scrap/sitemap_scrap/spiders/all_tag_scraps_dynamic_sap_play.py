@@ -9,7 +9,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 
 class DynamicTagSpider(scrapy.Spider):
-    name = 'dynamic_tag_spider_sap'
+    name = 'dynamic_tag_spider_sap_play'
     allowed_domains = ['v2.researchgiant.com']
     start_urls = ['https://v2.researchgiant.com/']
 

@@ -65,6 +65,8 @@ class DynamicTagSpiderSAP(scrapy.Spider):
         """Main function that parses the specified tags on the page."""
         print(f"Processing: {response.url}")
 
+        self.all_content = []
+
         for tag in self.tags:
             # Select elements based on the current tag
             selectors = response.xpath(f"//{tag}")
