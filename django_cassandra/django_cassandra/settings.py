@@ -31,12 +31,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_cassandra_engine',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles'
 ]
 
 MIDDLEWARE = [
@@ -75,10 +76,28 @@ WSGI_APPLICATION = 'django_cassandra.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django_cassandra_engine',
+        'NAME': 'scraping',
+        'HOST': '127.0.0.1',
+        'PORT': 9042,
+        'USER': 'admin',
+        'PASSWORD': 'admin',
+        'OPTIONS': {
+            'replication': {
+                'strategy_class': 'SimpleStrategy',
+                'replication_factor': 1
+            },
+            'connection': {
+                'consistency': None,
+                'retry_connect': True,
+                'lazy_connect': True,
+                'default_timeout': 10,
+                'metrics_enabled': False
+            }
+        }
     }
 }
+
 
 
 # Password validation
