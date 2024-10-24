@@ -1,0 +1,6 @@
+Flask
+python-dotenv
+flask-smorest
+pymongo
+Flask-PyMongo
+deepface
